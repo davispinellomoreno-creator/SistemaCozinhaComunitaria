@@ -1,4 +1,6 @@
 package com.example.SistemaCozinhaComunitaria.Repository;
 
-public interface ProdutosRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutosRepository extends JpaRepository {
 }
