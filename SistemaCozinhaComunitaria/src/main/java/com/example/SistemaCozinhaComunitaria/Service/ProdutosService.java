@@ -14,16 +14,9 @@ public class ProdutosService {
         this.repository = repository;
     }
 
-    public void SalvarProduto(ProdutoDto produto){
-
-
-
-
-
-
-
-
-
+    public void SalvarProduto(Produtos produto){
+repository.saveAndFlush(produto);
     }
+
 
 }
