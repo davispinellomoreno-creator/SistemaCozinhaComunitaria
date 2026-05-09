@@ -1,16 +1,7 @@
 package com.example.SistemaCozinhaComunitaria.Dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 
-@Getter
-@Setter
-public class ProdutoDto {
-
-
-    private String produto;
-    private LocalDate validade;
-
+public record ProdutoDto( String produtos,
+         LocalDate validade) {
 }
