@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Setter
 public class ProdutoDto {
 
-    private Long id;
+
     private String produto;
     private LocalDate validade;
-    private double quantidade;
+
 }
