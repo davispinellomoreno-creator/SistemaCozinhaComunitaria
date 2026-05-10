@@ -1,4 +1,12 @@
 package com.example.SistemaCozinhaComunitaria.Exception;
 
-public class ApiError {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public record ApiError(
+        int status,
+        String error,
+        String message,
+        LocalDateTime timestamp
+) {
 }
