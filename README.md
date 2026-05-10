@@ -56,7 +56,7 @@ Desenvolver uma solução tecnológica simples, acessível e eficiente para:
 
 ### Banco de Dados
 
-* H2 Database (ambiente de desenvolvimento)
+* MySql
 
 ---
 
