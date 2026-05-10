@@ -1,4 +1,4 @@
 package com.example.SistemaCozinhaComunitaria.Exception;
 
-public class ProdutosExceptions {
+public class ResourceNotFoundException {
 }
