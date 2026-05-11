@@ -2,6 +2,7 @@ package com.example.SistemaCozinhaComunitaria.Service;
 
 import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
+import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.ProdutosRepository;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.stereotype.Service;
@@ -49,13 +50,13 @@ public class ProdutosService {
     public Produtos buscarProdutoPorId (UUID id){
         return repository.findById(id)
                 .orElseThrow(
-                        () -> new RuntimeException("Produto não encontrado!")
+                        () -> new ResourceNotFoundException("Produto não encontrado!")
                 );
     }
     public void deletarProdutoPorId(UUID id){
 
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Produto não encontrado");
+            throw new ResourceNotFoundException("Produto não encontrado");
 
         }
         repository.deleteById(id);
@@ -63,7 +64,7 @@ public class ProdutosService {
     public ProdutoDto atualizarProduto (UUID id,ProdutoDto produtodto){
         Produtos Entity = repository.findById(id)
                 .orElseThrow(
-                        ()->new RuntimeException("Produto não encontrado!")
+                        ()->new ResourceNotFoundException("Produto não encontrado!")
 
                 );
 
