@@ -1,4 +1,4 @@
 package com.example.SistemaCozinhaComunitaria.Repository;
 
-public interface UsuarioRepository {
+public interface UsuarioRepository <Usuario, UUID> {
 }
