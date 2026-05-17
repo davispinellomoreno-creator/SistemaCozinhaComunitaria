@@ -1,4 +1,4 @@
 package com.example.SistemaCozinhaComunitaria.Dto;
 
-public record AlimentaçãoDto(String alimentacao) {
+public record AlimentacaoDto(String alimentacao) {
 }
