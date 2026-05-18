@@ -8,6 +8,7 @@ import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
 
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.UUID;
 
 @Service
@@ -18,6 +19,7 @@ public class AlimentacaoService {
     public AlimentacaoService(AlimentacaoRepository alimentacaoRepository) {
         this.alimentacaoRepository = alimentacaoRepository;
     }
+
 
     public UUID save(AlimentacaoDto dto) {
 
@@ -30,6 +32,7 @@ public class AlimentacaoService {
 
         return saved.getId();
     }
+}
 
 
 
