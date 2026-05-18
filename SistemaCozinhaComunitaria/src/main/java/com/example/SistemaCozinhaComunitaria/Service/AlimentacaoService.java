@@ -4,6 +4,7 @@ import com.example.SistemaCozinhaComunitaria.Dto.AlimentacaoDto;
 import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
 import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
+import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
 
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class AlimentacaoService {
 
         return saved.getId();
     }
-    public List<AlimentacaoDto> findAll() {
+    public List<AlimentacaoDto>findAll() {
         return alimentacaoRepository.findAll()
                 .stream()
                 .map(entity -> new AlimentacaoDto(
@@ -41,6 +42,14 @@ public class AlimentacaoService {
                         entity.getAlimentacao()
                 ))
                 .toList();
+    }
+
+    public Alimentacao buscarAlimentacao(UUID id){
+        return alimentacaoRepository.findById(id).orElseThrow(
+
+                ()-> new ResourceNotFoundException("Alimentação não encontrada")
+        );
+
     }
 }
 
