@@ -9,6 +9,7 @@ import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +22,7 @@ public class AlimentacaoService {
     }
 
 
-    public UUID save(AlimentacaoDto dto) {
+    public UUID salvarAlimentacao(AlimentacaoDto dto) {
 
         Alimentacao entity = new Alimentacao(
                 UUID.randomUUID(),
@@ -31,6 +32,15 @@ public class AlimentacaoService {
         Alimentacao saved = alimentacaoRepository.save(entity);
 
         return saved.getId();
+    }
+    public List<AlimentacaoDto> findAll() {
+        return alimentacaoRepository.findAll()
+                .stream()
+                .map(entity -> new AlimentacaoDto(
+                        entity.getId(),
+                        entity.getAlimentacao()
+                ))
+                .toList();
     }
 }
 
