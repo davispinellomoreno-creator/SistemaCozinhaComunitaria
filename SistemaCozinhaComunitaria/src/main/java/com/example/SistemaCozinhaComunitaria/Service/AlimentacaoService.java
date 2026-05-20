@@ -53,11 +53,13 @@ public class AlimentacaoService {
 
     }
 
-    public ResponseEntity<Void> deletarAlimentacaoPorId(UUID id){
-       if(!alimentacaoRepository.existsById(id)){
-           throw  new ResourceNotFoundException("Produto não encontrado");
-       }
-       return alimentacaoRepository.deleteById(id);
+    public void deleteById(UUID id) {
+
+        if (!alimentacaoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Produto não encontrado");
+        }
+
+        alimentacaoRepository.deleteById(id);
     }
 }
 
