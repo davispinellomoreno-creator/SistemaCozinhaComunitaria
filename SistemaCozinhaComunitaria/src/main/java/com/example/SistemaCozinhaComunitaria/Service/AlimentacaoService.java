@@ -7,6 +7,7 @@ import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.parser.Entity;
@@ -50,6 +51,13 @@ public class AlimentacaoService {
                 ()-> new ResourceNotFoundException("Alimentação não encontrada")
         );
 
+    }
+
+    public ResponseEntity<Void> deletarAlimentacaoPorId(UUID id){
+       if(!alimentacaoRepository.existsById(id)){
+           throw  new ResourceNotFoundException("Produto não encontrado");
+       }
+       return alimentacaoRepository.deleteById(id);
     }
 }
 
