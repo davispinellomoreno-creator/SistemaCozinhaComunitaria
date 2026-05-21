@@ -61,6 +61,22 @@ public class AlimentacaoService {
 
         alimentacaoRepository.deleteById(id);
     }
+
+    public Alimentacao atualizar(UUID id, AlimentacaoDto dto) {
+
+
+        Alimentacao entity = alimentacaoRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Alimentação não encontrada"));
+
+        entity.setAlimentacao(dto.alimentacao());
+
+
+        Alimentacao alimentacaoAtualizada = alimentacaoRepository.save(entity);
+
+
+        return alimentacaoAtualizada;
+    }
 }
 
 
