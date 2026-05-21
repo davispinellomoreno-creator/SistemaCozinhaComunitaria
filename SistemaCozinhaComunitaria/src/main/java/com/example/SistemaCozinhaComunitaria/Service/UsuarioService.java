@@ -1,7 +1,17 @@
 package com.example.SistemaCozinhaComunitaria.Service;
 
+import com.example.SistemaCozinhaComunitaria.Dto.AlimentacaoDto;
+import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
+import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
+import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
+import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UsuarioService {
@@ -10,6 +20,34 @@ public class UsuarioService {
 
     public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
+    }
+
+    public UUID salvarUsuario(UsuarioDto usuarioDto){
+        Usuario entity = new Usuario(
+                UUID.randomUUID(),
+                usuarioDto.nome(),
+                usuarioDto.email(),
+                usuarioDto.senha(),
+                usuarioDto.email(),
+                usuarioDto.ativo()
+        );
+
+        Usuario usuarioSalvo = usuarioRepository.save(entity);
+
+        return usuarioSalvo.getId();
+
+    }
+    public List<UsuarioDto> findAll() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(entity -> new UsuarioDto(
+                        entity.getId(),
+                        entity.getNome(),
+                        entity.getEmail(),
+                        entity.getSenha(),
+                        entity.getAtivo()
+                ))
+                .toList();
     }
 
 

@@ -29,4 +29,5 @@ public class Usuario {
     private String perfil;
 
     private Boolean ativo;
+
 }

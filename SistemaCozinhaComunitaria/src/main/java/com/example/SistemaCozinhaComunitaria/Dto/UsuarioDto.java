@@ -1,4 +1,4 @@
 package com.example.SistemaCozinhaComunitaria.Dto;
 
-public record UsuarioDto(String nome,String email,String senha,boolean ativo) {
+public record UsuarioDto(java.util.UUID id, String nome, String email, String senha, boolean ativo) {
 }
