@@ -23,7 +23,7 @@ public class Produtos {
     private String produto;
     private LocalDate validade;
     private double quantidade;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
     private Usuario usuario;

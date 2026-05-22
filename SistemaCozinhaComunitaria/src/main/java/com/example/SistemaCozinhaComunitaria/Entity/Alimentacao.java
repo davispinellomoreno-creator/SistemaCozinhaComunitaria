@@ -22,7 +22,7 @@ public class Alimentacao {
 
     private String alimentacao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
     private Usuario usuario;
