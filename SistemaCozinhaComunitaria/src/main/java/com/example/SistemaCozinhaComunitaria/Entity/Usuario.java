@@ -1,8 +1,11 @@
 package com.example.SistemaCozinhaComunitaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,4 +33,11 @@ public class Usuario {
 
     private Boolean ativo;
 
+    @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
+    private List<Produtos> produtos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
+    private List<Alimentacao> alimentacoes = new ArrayList<>();
 }

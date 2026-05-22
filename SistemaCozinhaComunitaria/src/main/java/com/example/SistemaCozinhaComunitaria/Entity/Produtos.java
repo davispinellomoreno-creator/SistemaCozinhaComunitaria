@@ -1,5 +1,6 @@
 package com.example.SistemaCozinhaComunitaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,10 @@ public class Produtos {
     private String produto;
     private LocalDate validade;
     private double quantidade;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference
+    private Usuario usuario;
 
 
 
