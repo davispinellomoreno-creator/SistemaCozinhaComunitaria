@@ -5,6 +5,7 @@ import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,37 @@ public class UsuarioService {
                 ))
                 .toList();
     }
+    public Usuario buscarAlimentacao(UUID id){
+        return usuarioRepository.findById(id).orElseThrow(
 
+                ()-> new ResourceNotFoundException("Alimentação não encontrada")
+        );
+
+    }
+
+    public void deleteById(UUID id) {
+
+        if (!usuarioRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Produto não encontrado");
+        }
+
+        usuarioRepository.deleteById(id);
+    }
+    public Usuario atualizar(UUID id, AlimentacaoDto dto) {
+
+
+        Usuario entity = usuarioRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Alimentação não encontrada"));
+
+        entity.setNome(dto.alimentacao());
+
+
+        Usuario usuarioAtualizada = usuarioRepository.save(entity);
+
+
+        return usuarioAtualizada;
+    }
 
 
 }
