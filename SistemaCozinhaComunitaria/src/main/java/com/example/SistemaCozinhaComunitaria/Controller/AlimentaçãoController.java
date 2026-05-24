@@ -25,7 +25,7 @@ public class AlimentaçãoController {
     public ResponseEntity<UUID> create(@RequestBody AlimentacaoDto alimentacaoDto) {
         UUID id = alimentacaoService.salvarAlimentacao(alimentacaoDto);
 
-        URI location = URI.create("/usuarios/" + id);
+        URI location = URI.create("/alimentacao/" + id);
 
         return ResponseEntity
                 .created(location)
