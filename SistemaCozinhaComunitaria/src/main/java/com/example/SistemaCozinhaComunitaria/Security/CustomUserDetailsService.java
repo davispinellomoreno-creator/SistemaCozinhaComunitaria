@@ -1,7 +1,9 @@
 package com.example.SistemaCozinhaComunitaria.Security;
 
 
+import org.springframework.stereotype.Service;
 
-public class CustomUserDetailsService {
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
 
 }
