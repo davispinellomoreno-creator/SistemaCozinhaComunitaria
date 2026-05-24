@@ -1,9 +1,6 @@
 package com.example.SistemaCozinhaComunitaria.Service;
 
-import com.example.SistemaCozinhaComunitaria.Dto.AlimentacaoDto;
-import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
-import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
@@ -11,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class UsuarioService {
@@ -50,7 +45,7 @@ public class UsuarioService {
                 ))
                 .toList();
     }
-    public Usuario buscarAlimentacao(UUID id){
+    public Usuario buscarUsuario(UUID id){
         return usuarioRepository.findById(id).orElseThrow(
 
                 ()-> new ResourceNotFoundException("Alimentação não encontrada")
@@ -66,7 +61,7 @@ public class UsuarioService {
 
         usuarioRepository.deleteById(id);
     }
-    public Usuario atualizar(UUID id, AlimentacaoDto dto) {
+    public Usuario atualizar(UUID id, UsuarioDto dto) {
 
 
         Usuario entity = usuarioRepository.findById(id)
