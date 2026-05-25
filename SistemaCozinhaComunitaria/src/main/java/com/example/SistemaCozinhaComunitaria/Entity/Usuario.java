@@ -42,4 +42,8 @@ public class Usuario {
             orphanRemoval = true)
     @JsonManagedReference
     private List<Alimentacao> alimentacoes = new ArrayList<>();
+
+
+    public Usuario(UUID uuid, String nome, String email, String senha, boolean ativo) {
+    }
 }

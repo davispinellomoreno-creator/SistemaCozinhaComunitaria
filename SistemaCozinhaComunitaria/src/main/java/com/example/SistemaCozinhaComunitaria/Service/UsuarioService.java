@@ -18,20 +18,17 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public UUID salvarUsuario(UsuarioDto usuarioDto){
+    public Usuario salvar(UsuarioDto usuarioDto) {
+
         Usuario entity = new Usuario(
                 UUID.randomUUID(),
                 usuarioDto.nome(),
                 usuarioDto.email(),
                 usuarioDto.senha(),
-                usuarioDto.email(),
                 usuarioDto.ativo()
         );
 
-        Usuario usuarioSalvo = usuarioRepository.save(entity);
-
-        return usuarioSalvo.getId();
-
+        return usuarioRepository.save(entity);
     }
     public List<UsuarioDto> findAll() {
         return usuarioRepository.findAll()
@@ -68,7 +65,7 @@ public class UsuarioService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Alimentação não encontrada"));
 
-        entity.setNome(dto.alimentacao());
+        entity.setNome(dto.nome());
 
 
         Usuario usuarioAtualizada = usuarioRepository.save(entity);

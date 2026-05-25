@@ -23,7 +23,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UUID> create(@RequestBody UsuarioDto usuarioDto) {
-        UUID id = usuarioService.salvarUsuario(usuarioDto);
+        UUID id = usuarioService.salvar(usuarioDto).getId();
 
         URI location = URI.create("/usuarios/" + id);
 
