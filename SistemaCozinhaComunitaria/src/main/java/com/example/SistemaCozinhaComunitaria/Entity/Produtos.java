@@ -29,6 +29,5 @@ public class Produtos {
     private Usuario usuario;
 
 
-    public Produtos(UUID uuid, String produtos, LocalDate validade, double quantidade) {
-    }
+
 }

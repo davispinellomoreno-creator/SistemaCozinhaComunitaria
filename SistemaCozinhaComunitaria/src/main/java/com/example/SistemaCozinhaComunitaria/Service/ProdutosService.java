@@ -24,13 +24,12 @@ public class ProdutosService {
 
 
     public UUID salvarProduto(@NotNull ProdutoDto produtodto) {
-
-        var entity = new Produtos(
-                UUID.randomUUID(),
-                produtodto.produtos(),
-                produtodto.validade(),
-                produtodto.quantidade()
-        );
+        var entity = Produtos.builder()
+                .id(UUID.randomUUID())
+                .produto(produtodto.produtos())
+                .validade(produtodto.validade())
+                .quantidade(produtodto.quantidade())
+                .build();
 
         var produtoSalvo = repository.save(entity);
 
