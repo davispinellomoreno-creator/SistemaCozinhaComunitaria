@@ -57,6 +57,7 @@ Desenvolver uma solução tecnológica simples, acessível e eficiente para:
 ### Banco de Dados
 
 * MySql
+* OBS : Utilizei o Banco de dados em memoria H2 para testar se estava dando tudo certo
 
 ---
 
