@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table( name = "Cadastro_Usuario")
+@Table( name = "Tabela_Usuario")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
