@@ -52,32 +52,18 @@ Desenvolver uma solução tecnológica simples, acessível e eficiente para:
 
 * HTML
 * CSS
-* JavaScript
+* Typescript
+* Vue.js
+* React.js
 
 ### Banco de Dados
 
-* MySql
+* PostgreSql
 * OBS : Utilizei o Banco de dados em memoria H2 para testar se estava dando tudo certo
 
 ---
 
-## 🏗️ Estrutura do Projeto
 
-```
-projeto-cozinha-solidaria
-├── backend
-│   ├── controller
-│   ├── service
-│   ├── repository
-│   └── model
-│
-└── frontend
-    ├── index.html
-    ├── style.css
-    └── script.js
-```
-
----
 
 ## 🚀 Como Executar o Projeto
 
