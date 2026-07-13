@@ -44,6 +44,5 @@ public class Usuario {
     private List<Alimentacao> alimentacoes = new ArrayList<>();
 
 
-    public Usuario(UUID uuid, String nome, String email, String senha, boolean ativo) {
-    }
+
 }

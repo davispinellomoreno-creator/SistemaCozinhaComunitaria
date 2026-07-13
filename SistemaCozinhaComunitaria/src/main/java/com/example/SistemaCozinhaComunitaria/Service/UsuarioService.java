@@ -4,6 +4,7 @@ import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,23 +14,25 @@ import java.util.UUID;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository){
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario salvar(UsuarioDto usuarioDto) {
 
-        Usuario entity = new Usuario(
-                UUID.randomUUID(),
-                usuarioDto.nome(),
-                usuarioDto.email(),
-                usuarioDto.senha(),
-                usuarioDto.ativo()
-        );
+        Usuario entity = Usuario.builder()
+                .nome(usuarioDto.nome())
+                .email(usuarioDto.email())
+                .senha(passwordEncoder.encode(usuarioDto.senha()))
+                .ativo(usuarioDto.ativo())
+                .build(); // ✅ sem .id(...) — o Hibernate gera sozinho
 
         return usuarioRepository.save(entity);
     }
+
     public List<UsuarioDto> findAll() {
         return usuarioRepository.findAll()
                 .stream()
@@ -42,37 +45,27 @@ public class UsuarioService {
                 ))
                 .toList();
     }
+
     public Usuario buscarUsuario(UUID id){
         return usuarioRepository.findById(id).orElseThrow(
-
-                ()-> new ResourceNotFoundException("Alimentação não encontrada")
+                () -> new ResourceNotFoundException("Alimentação não encontrada")
         );
-
     }
 
     public void deleteById(UUID id) {
-
         if (!usuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException("Produto não encontrado");
         }
-
         usuarioRepository.deleteById(id);
     }
+
     public Usuario atualizar(UUID id, UsuarioDto dto) {
-
-
         Usuario entity = usuarioRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Alimentação não encontrada"));
 
         entity.setNome(dto.nome());
 
-
-        Usuario usuarioAtualizada = usuarioRepository.save(entity);
-
-
-        return usuarioAtualizada;
+        return usuarioRepository.save(entity);
     }
-
-
 }
