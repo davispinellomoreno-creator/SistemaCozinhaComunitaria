@@ -25,7 +25,6 @@ public class ProdutosService {
 
     public UUID salvarProduto(@NotNull ProdutoDto produtodto) {
         var entity = Produtos.builder()
-                .id(UUID.randomUUID())
                 .produto(produtodto.produtos())
                 .validade(produtodto.validade())
                 .quantidade(produtodto.quantidade())
