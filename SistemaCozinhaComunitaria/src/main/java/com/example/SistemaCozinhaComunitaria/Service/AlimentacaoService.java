@@ -27,7 +27,6 @@ public class AlimentacaoService {
 
         Alimentacao entity = new Alimentacao();
 
-        entity.setId(UUID.randomUUID());
         entity.setAlimentacao(dto.alimentacao());
 
         Alimentacao saved = alimentacaoRepository.save(entity);
