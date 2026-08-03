@@ -23,16 +23,18 @@ public class AlimentacaoService {
         this.alimentacaoRepository = alimentacaoRepository;
     }
 
-    public UUID salvarAlimentacao(AlimentacaoDto dto) {
-
+    public AlimentacaoDto salvarAlimentacao(AlimentacaoDto dto) {  // ✅ tipo de retorno = AlimentacaoDto
         Alimentacao entity = new Alimentacao();
-
         entity.setAlimentacao(dto.alimentacao());
 
         Alimentacao saved = alimentacaoRepository.save(entity);
 
-        return saved.getId();
+        return new AlimentacaoDto(
+                saved.getId(),
+                saved.getAlimentacao()
+        );
     }
+    
     public List<AlimentacaoDto>findAll() {
         return alimentacaoRepository.findAll()
                 .stream()

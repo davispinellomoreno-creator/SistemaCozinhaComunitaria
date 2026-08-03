@@ -22,14 +22,14 @@ public class AlimentaçãoController {
         this.alimentacaoService = alimentacaoService;
     }
     @PostMapping
-    public ResponseEntity<UUID> create(@RequestBody AlimentacaoDto alimentacaoDto) {
-        UUID id = alimentacaoService.salvarAlimentacao(alimentacaoDto);
+    public ResponseEntity<AlimentacaoDto> create(@RequestBody AlimentacaoDto alimentacaoDto) {
+        AlimentacaoDto salvo = alimentacaoService.salvarAlimentacao(alimentacaoDto);
 
-        URI location = URI.create("/alimentacao/" + id);
+        URI location = URI.create("/alimentacao/" + salvo.id());
 
         return ResponseEntity
                 .created(location)
-                .body(id);
+                .body(salvo);
     }
 
     @GetMapping("/{id}")
