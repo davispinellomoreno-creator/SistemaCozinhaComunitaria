@@ -2,6 +2,7 @@ package com.example.SistemaCozinhaComunitaria.Service;
 
 import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ public class UsuarioService {
                 .email(usuarioDto.email())
                 .senha(passwordEncoder.encode(usuarioDto.senha()))
                 .ativo(usuarioDto.ativo())
+                .perfil(Perfil.USER)
                 .build(); // ✅ sem .id(...) — o Hibernate gera sozinho
 
         return usuarioRepository.save(entity);
