@@ -1,5 +1,6 @@
 package com.example.SistemaCozinhaComunitaria.Entity;
 
+import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,10 +29,10 @@ public class Usuario {
 
     private String senha;
 
-
-    private String perfil;
-
     private Boolean ativo;
+
+    @Enumerated(EnumType.STRING)
+    private Perfil perfil;
 
     @OneToMany(mappedBy = "usuario")
     @JsonManagedReference
