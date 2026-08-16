@@ -1,6 +1,7 @@
 package com.example.SistemaCozinhaComunitaria.Service;
 
 import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
+import com.example.SistemaCozinhaComunitaria.Dto.UsuarioListagemDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
@@ -35,15 +36,15 @@ public class UsuarioService {
         return usuarioRepository.save(entity);
     }
 
-    public List<UsuarioDto> findAll() {
+    public List<UsuarioListagemDto> findAll() {
         return usuarioRepository.findAll()
                 .stream()
-                .map(entity -> new UsuarioDto(
+                .map(entity -> new UsuarioListagemDto(
                         entity.getId(),
                         entity.getNome(),
                         entity.getEmail(),
-                        entity.getSenha(),
-                        entity.getAtivo()
+                        entity.getAtivo(),
+                        entity.getPerfil()
                 ))
                 .toList();
     }
@@ -67,6 +68,15 @@ public class UsuarioService {
                         new ResourceNotFoundException("Alimentação não encontrada"));
 
         entity.setNome(dto.nome());
+
+        return usuarioRepository.save(entity);
+    }
+    public Usuario atualizarPerfil (UUID id, Perfil novoPerfil){
+        Usuario entity = usuarioRepository.findById(id)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Usuário não encontrado"));
+
+        entity.setPerfil(novoPerfil);
 
         return usuarioRepository.save(entity);
     }

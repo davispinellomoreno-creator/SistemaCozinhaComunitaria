@@ -1,6 +1,8 @@
 package com.example.SistemaCozinhaComunitaria.Controller;
 
+import com.example.SistemaCozinhaComunitaria.Dto.AtualizarPerfilDto;
 import com.example.SistemaCozinhaComunitaria.Dto.UsuarioDto;
+import com.example.SistemaCozinhaComunitaria.Dto.UsuarioListagemDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -36,18 +38,27 @@ public class UsuarioController {
     public ResponseEntity<Usuario> buscarProduto(@PathVariable UUID id) {
         return ResponseEntity.ok(usuarioService.buscarUsuario(id));
     }
+
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> findAll() {
-        List<UsuarioDto> produtos = usuarioService.findAll();
-        return ResponseEntity.ok(produtos);
+    public ResponseEntity<List<UsuarioListagemDto>> findAll() {
+        List<UsuarioListagemDto> usuarios = usuarioService.findAll();
+        return ResponseEntity.ok(usuarios);
     }
 
-    @PutMapping
-    public ResponseEntity<Usuario> atualizarProdutos (@PathVariable UUID id, @RequestBody UsuarioDto usuarioDto){
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarProdutos(@PathVariable UUID id, @RequestBody UsuarioDto usuarioDto) {
         Usuario atualizar = usuarioService.atualizar(id, usuarioDto);
         return ResponseEntity.ok(atualizar);
+    }
 
+
+    @PatchMapping("/{id}/perfil")
+    public ResponseEntity<Usuario> atualizarPerfil(
+            @PathVariable UUID id,
+            @RequestBody AtualizarPerfilDto dto
+    ) {
+        Usuario atualizado = usuarioService.atualizarPerfil(id, dto.perfil());
+        return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
@@ -56,3 +67,4 @@ public class UsuarioController {
         usuarioService.deleteById(id);
     }
 }
+
