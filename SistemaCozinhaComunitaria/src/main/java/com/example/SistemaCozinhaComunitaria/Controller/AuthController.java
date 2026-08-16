@@ -3,6 +3,8 @@ package com.example.SistemaCozinhaComunitaria.Controller;
 
 
 import com.example.SistemaCozinhaComunitaria.Dto.LoginDto;
+import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import com.example.SistemaCozinhaComunitaria.Security.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +20,12 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UsuarioRepository usuarioRepository;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService, UsuarioRepository usuarioRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @PostMapping("/login")
@@ -34,11 +38,20 @@ public class AuthController {
                 )
         );
 
+        Usuario usuario = usuarioRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(()-> new RuntimeException("Usuário não encontrado"));
+
+        String perfil = usuario.getPerfil() != null ? usuario.getPerfil().name() : "USER";
+
+
+
         // 2. Se chegou aqui, autenticou com sucesso — gera o token
         // ⚠️ Ajustar conforme a assinatura real do seu JwtService
-        String token = jwtService.generateToken(loginDto.getEmail());
+        String token = jwtService.generateToken(loginDto.getEmail(), perfil); // ✅ 2 parâmetros
 
-        // 3. Devolve o token no corpo da resposta
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "perfil", perfil
+        ));
     }
 }

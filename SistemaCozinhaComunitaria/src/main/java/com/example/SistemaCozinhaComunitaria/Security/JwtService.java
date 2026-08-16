@@ -23,8 +23,10 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 horas
 
     // Gera o token a partir do email (username)
-    public String generateToken(String email) {
-        return generateToken(new HashMap<>(), email);
+    public String generateToken(String email, String perfil) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("perfil", perfil);
+        return generateToken(claims, email);
     }
 
     public String generateToken(Map<String, Object> extraClaims, String email) {

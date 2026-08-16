@@ -1,6 +1,7 @@
 package com.example.SistemaCozinhaComunitaria.Security;
 
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o email: " + email));
 
+        String perfil = usuario.getPerfil() != null ? usuario.getPerfil().name() : "USER"
+;
         return User.builder()
                 .username(usuario.getEmail())
                 .password(usuario.getSenha())
-                .roles("USER") // ajuste conforme seu modelo de permissões, se tiver
+                .roles(perfil) // ajuste conforme seu modelo de permissões, se tiver
                 .build();
     }
 }
