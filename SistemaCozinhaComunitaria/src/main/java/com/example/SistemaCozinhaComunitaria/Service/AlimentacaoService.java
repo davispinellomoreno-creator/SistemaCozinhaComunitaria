@@ -4,6 +4,7 @@ import com.example.SistemaCozinhaComunitaria.Dto.AlimentacaoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
+import com.example.SistemaCozinhaComunitaria.Exception.AcessoNegadoException;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
@@ -65,11 +66,19 @@ public class AlimentacaoService {
                 () -> new ResourceNotFoundException("Alimentação não encontrada")
         );
     }
-
     public void deleteById(UUID id) {
-        if (!alimentacaoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Alimentação não encontrada");
+        Usuario usuarioLogado = getUsuarioLogado();
+
+        Alimentacao alimento = alimentacaoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Alimentação não encontrada"));
+
+        boolean ehDono = alimento.getUsuario() != null
+                && alimento.getUsuario().getId().equals(usuarioLogado.getId());
+
+        if (usuarioLogado.getPerfil() != Perfil.ADMIN && !ehDono) {
+            throw new AcessoNegadoException("Você não tem permissão para excluir este item");
         }
+
         alimentacaoRepository.deleteById(id);
     }
 
