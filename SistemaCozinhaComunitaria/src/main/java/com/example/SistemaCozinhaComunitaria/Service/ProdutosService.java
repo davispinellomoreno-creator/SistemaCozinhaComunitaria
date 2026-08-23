@@ -2,10 +2,14 @@ package com.example.SistemaCozinhaComunitaria.Service;
 
 import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
+import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.ProdutosRepository;
+import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,28 +19,42 @@ import java.util.UUID;
 public class ProdutosService {
 
     private final ProdutosRepository repository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ProdutosService(ProdutosRepository repository) {
+    public ProdutosService(ProdutosRepository repository, UsuarioRepository usuarioRepository) {
         this.repository = repository;
+        this.usuarioRepository = usuarioRepository;
     }
 
-
-
+    private Usuario getUsuarioLogado() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+    }
 
     public UUID salvarProduto(@NotNull ProdutoDto produtodto) {
+        Usuario usuarioLogado = getUsuarioLogado();
+
         var entity = Produtos.builder()
                 .produto(produtodto.produtos())
                 .validade(produtodto.validade())
                 .quantidade(produtodto.quantidade())
+                .usuario(usuarioLogado) // ✅ associa ao usuário logado
                 .build();
 
         var produtoSalvo = repository.save(entity);
 
         return produtoSalvo.getId();
     }
+
     public List<ProdutoDto> findAll() {
-        return repository.findAll()
-                .stream()
+        Usuario usuarioLogado = getUsuarioLogado();
+
+        List<Produtos> produtos = usuarioLogado.getPerfil() == Perfil.ADMIN
+                ? repository.findAll()
+                : repository.findByUsuarioId(usuarioLogado.getId());
+
+        return produtos.stream()
                 .map(entity -> new ProdutoDto(
                         entity.getId(),
                         entity.getProduto(),
@@ -46,27 +64,27 @@ public class ProdutosService {
                 .toList();
     }
 
-    public Produtos buscarProdutoPorId (UUID id){
+    public Produtos buscarProdutoPorId(UUID id) {
         return repository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Produto não encontrado!")
                 );
     }
-    public ResponseEntity<Void> deletarProdutoPorId(UUID id){
+
+    public ResponseEntity<Void> deletarProdutoPorId(UUID id) {
 
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Produto não encontrado");
-
         }
         repository.deleteById(id);
 
         return null;
     }
-    public ProdutoDto atualizarProduto (UUID id,ProdutoDto produtodto){
+
+    public ProdutoDto atualizarProduto(UUID id, ProdutoDto produtodto) {
         Produtos Entity = repository.findById(id)
                 .orElseThrow(
-                        ()->new ResourceNotFoundException("Produto não encontrado!")
-
+                        () -> new ResourceNotFoundException("Produto não encontrado!")
                 );
 
         Entity.setProduto(produtodto.produtos());

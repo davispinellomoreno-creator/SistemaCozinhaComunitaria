@@ -1,16 +1,15 @@
 package com.example.SistemaCozinhaComunitaria.Service;
 
 import com.example.SistemaCozinhaComunitaria.Dto.AlimentacaoDto;
-import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Alimentacao;
-import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
+import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
+import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.AlimentacaoRepository;
-
-import org.springframework.http.ResponseEntity;
+import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,14 +17,25 @@ import java.util.UUID;
 public class AlimentacaoService {
 
     private final AlimentacaoRepository alimentacaoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public AlimentacaoService(AlimentacaoRepository alimentacaoRepository) {
+    public AlimentacaoService(AlimentacaoRepository alimentacaoRepository, UsuarioRepository usuarioRepository) {
         this.alimentacaoRepository = alimentacaoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
-    public AlimentacaoDto salvarAlimentacao(AlimentacaoDto dto) {  // ✅ tipo de retorno = AlimentacaoDto
+    private Usuario getUsuarioLogado() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+    }
+
+    public AlimentacaoDto salvarAlimentacao(AlimentacaoDto dto) {
+        Usuario usuarioLogado = getUsuarioLogado();
+
         Alimentacao entity = new Alimentacao();
         entity.setAlimentacao(dto.alimentacao());
+        entity.setUsuario(usuarioLogado); // ✅ associa ao usuário logado
 
         Alimentacao saved = alimentacaoRepository.save(entity);
 
@@ -34,10 +44,15 @@ public class AlimentacaoService {
                 saved.getAlimentacao()
         );
     }
-    
-    public List<AlimentacaoDto>findAll() {
-        return alimentacaoRepository.findAll()
-                .stream()
+
+    public List<AlimentacaoDto> findAll() {
+        Usuario usuarioLogado = getUsuarioLogado();
+
+        List<Alimentacao> alimentacoes = usuarioLogado.getPerfil() == Perfil.ADMIN
+                ? alimentacaoRepository.findAll()
+                : alimentacaoRepository.findByUsuarioId(usuarioLogado.getId());
+
+        return alimentacoes.stream()
                 .map(entity -> new AlimentacaoDto(
                         entity.getId(),
                         entity.getAlimentacao()
@@ -45,35 +60,27 @@ public class AlimentacaoService {
                 .toList();
     }
 
-    public Alimentacao buscarAlimentacao(UUID id){
+    public Alimentacao buscarAlimentacao(UUID id) {
         return alimentacaoRepository.findById(id).orElseThrow(
-
-                ()-> new ResourceNotFoundException("Alimentação não encontrada")
+                () -> new ResourceNotFoundException("Alimentação não encontrada")
         );
-
     }
 
     public void deleteById(UUID id) {
-
         if (!alimentacaoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Produto não encontrado");
+            throw new ResourceNotFoundException("Alimentação não encontrada");
         }
-
         alimentacaoRepository.deleteById(id);
     }
 
     public Alimentacao atualizar(UUID id, AlimentacaoDto dto) {
-
-
         Alimentacao entity = alimentacaoRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Alimentação não encontrada"));
 
         entity.setAlimentacao(dto.alimentacao());
 
-
         Alimentacao alimentacaoAtualizada = alimentacaoRepository.save(entity);
-
 
         return alimentacaoAtualizada;
     }
