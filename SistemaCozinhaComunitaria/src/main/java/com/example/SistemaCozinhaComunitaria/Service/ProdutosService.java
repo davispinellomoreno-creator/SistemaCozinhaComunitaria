@@ -4,6 +4,7 @@ import com.example.SistemaCozinhaComunitaria.Dto.ProdutoDto;
 import com.example.SistemaCozinhaComunitaria.Entity.Produtos;
 import com.example.SistemaCozinhaComunitaria.Entity.Usuario;
 import com.example.SistemaCozinhaComunitaria.Enum.Perfil;
+import com.example.SistemaCozinhaComunitaria.Exception.AcessoNegadoException;
 import com.example.SistemaCozinhaComunitaria.Exception.ResourceNotFoundException;
 import com.example.SistemaCozinhaComunitaria.Repository.ProdutosRepository;
 import com.example.SistemaCozinhaComunitaria.Repository.UsuarioRepository;
@@ -73,11 +74,16 @@ public class ProdutosService {
 
     public ResponseEntity<Void> deletarProdutoPorId(UUID id) {
 
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Produto não encontrado");
+        Usuario usuarioLogado = getUsuarioLogado();
+        Produtos produto = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
+        boolean ehDono = produto.getUsuario() != null
+                && produto.getUsuario().getId().equals(usuarioLogado.getId());
+        if (usuarioLogado.getPerfil() != Perfil.ADMIN && !ehDono) {
+            throw new AcessoNegadoException("Você não tem permissão para excluir este item");
         }
-        repository.deleteById(id);
 
+    repository.deleteById(id);
         return null;
     }
 

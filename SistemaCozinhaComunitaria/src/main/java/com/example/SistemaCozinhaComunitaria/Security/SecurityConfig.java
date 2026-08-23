@@ -1,6 +1,5 @@
 package com.example.SistemaCozinhaComunitaria.Security;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,11 +36,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/login", "/usuario").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN") // ✅ adicionado
-                        .requestMatchers(HttpMethod.PATCH, "/usuario/**").hasRole("ADMIN") // ✅ adicionado
-                        .requestMatchers(HttpMethod.DELETE, "/produtos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/alimentacao/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/usuario/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN") // ✅ adicionado
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -53,7 +50,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // ✅ adicionado PATCH
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
