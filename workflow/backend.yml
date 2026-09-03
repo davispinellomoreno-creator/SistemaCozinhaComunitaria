@@ -20,4 +20,5 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-      run: mvn clean package -DskipTests
+        working-directory: ./SistemaCozinhaComunitaria
+        run: mvn clean install -DskipTests
