@@ -49,18 +49,14 @@ public class ProdutosService {
     }
 
     public List<ProdutoDto> findAll() {
-        Usuario usuarioLogado = getUsuarioLogado();
-
-        List<Produtos> produtos = usuarioLogado.getPerfil() == Perfil.ADMIN
-                ? repository.findAll()
-                : repository.findByUsuarioId(usuarioLogado.getId());
-
-        return produtos.stream()
+        return repository.findAll()
+                .stream()
                 .map(entity -> new ProdutoDto(
                         entity.getId(),
                         entity.getProduto(),
                         entity.getValidade(),
-                        entity.getQuantidade()
+                        entity.getQuantidade(),
+                        entity.getUsuario() != null ? entity.getUsuario().getNome() : "—" // ✅ novo
                 ))
                 .toList();
     }
@@ -88,22 +84,21 @@ public class ProdutosService {
     }
 
     public ProdutoDto atualizarProduto(UUID id, ProdutoDto produtodto) {
-        Produtos Entity = repository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Produto não encontrado!")
-                );
+        Produtos entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado!"));
 
-        Entity.setProduto(produtodto.produtos());
-        Entity.setValidade(produtodto.validade());
-        Entity.setQuantidade(produtodto.quantidade());
+        entity.setProduto(produtodto.produtos());
+        entity.setValidade(produtodto.validade());
+        entity.setQuantidade(produtodto.quantidade());
 
-        Produtos atualizar = repository.save(Entity);
+        Produtos atualizar = repository.save(entity);
 
         return new ProdutoDto(
                 atualizar.getId(),
                 atualizar.getProduto(),
                 atualizar.getValidade(),
-                atualizar.getQuantidade()
+                atualizar.getQuantidade(),
+                atualizar.getUsuario() != null ? atualizar.getUsuario().getNome() : "—"
         );
     }
 }

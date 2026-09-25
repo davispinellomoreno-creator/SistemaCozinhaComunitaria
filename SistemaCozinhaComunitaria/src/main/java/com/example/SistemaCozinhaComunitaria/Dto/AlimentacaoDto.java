@@ -1,5 +1,6 @@
 package com.example.SistemaCozinhaComunitaria.Dto;
 
-public record AlimentacaoDto(java.util.UUID id, String alimentacao) {
+import java.util.UUID;
 
+public record AlimentacaoDto(UUID id, String alimentacao, String criadoPor) {
 }

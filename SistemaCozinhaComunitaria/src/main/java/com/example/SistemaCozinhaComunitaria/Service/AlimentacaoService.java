@@ -36,27 +36,24 @@ public class AlimentacaoService {
 
         Alimentacao entity = new Alimentacao();
         entity.setAlimentacao(dto.alimentacao());
-        entity.setUsuario(usuarioLogado); // ✅ associa ao usuário logado
+        entity.setUsuario(usuarioLogado);
 
         Alimentacao saved = alimentacaoRepository.save(entity);
 
         return new AlimentacaoDto(
                 saved.getId(),
-                saved.getAlimentacao()
+                saved.getAlimentacao(),
+                saved.getUsuario().getNome() // ✅ novo
         );
     }
 
     public List<AlimentacaoDto> findAll() {
-        Usuario usuarioLogado = getUsuarioLogado();
-
-        List<Alimentacao> alimentacoes = usuarioLogado.getPerfil() == Perfil.ADMIN
-                ? alimentacaoRepository.findAll()
-                : alimentacaoRepository.findByUsuarioId(usuarioLogado.getId());
-
-        return alimentacoes.stream()
+        return alimentacaoRepository.findAll()
+                .stream()
                 .map(entity -> new AlimentacaoDto(
                         entity.getId(),
-                        entity.getAlimentacao()
+                        entity.getAlimentacao(),
+                        entity.getUsuario() != null ? entity.getUsuario().getNome() : "—" // ✅ novo
                 ))
                 .toList();
     }
@@ -84,14 +81,11 @@ public class AlimentacaoService {
 
     public Alimentacao atualizar(UUID id, AlimentacaoDto dto) {
         Alimentacao entity = alimentacaoRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Alimentação não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Alimentação não encontrada"));
 
         entity.setAlimentacao(dto.alimentacao());
 
-        Alimentacao alimentacaoAtualizada = alimentacaoRepository.save(entity);
-
-        return alimentacaoAtualizada;
+        return alimentacaoRepository.save(entity);
     }
 }
 
