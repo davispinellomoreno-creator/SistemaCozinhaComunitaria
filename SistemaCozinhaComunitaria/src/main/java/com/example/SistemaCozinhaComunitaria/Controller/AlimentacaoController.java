@@ -14,11 +14,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/alimentacao")
-public class AlimentaçãoController {
+public class AlimentacaoController {
 
     private final AlimentacaoService alimentacaoService;
 
-    public AlimentaçãoController(AlimentacaoService alimentacaoService) {
+    public AlimentacaoController(AlimentacaoService alimentacaoService) {
         this.alimentacaoService = alimentacaoService;
     }
     @PostMapping
